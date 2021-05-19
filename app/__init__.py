@@ -24,8 +24,8 @@ def create_app(test_config=False):
 
     db.init_app(app)
 
-    from app.create_db import init_app
-    init_app(app)
+    # from app.create_db import init_app
+    # init_app(app)
 
     from app.main import bp
     app.register_blueprint(bp)
