@@ -48,7 +48,7 @@
                   </form>
 
                   <ul class="nav justify-content-end">
-                      {% if current_user %}
+                      {% if current_user.is_authenticated %}
                       <li class="nav-item">
                           <p>Hello {{ current_user.username }}</p>
                       </li>
@@ -78,7 +78,9 @@
                   {% endfor %}
               {% endif %}
           {% endwith %}
+          <div class="h-100, p-5, bg-light, border rounded-3">
           {% block app_content %}{% endblock %}
+          </div>
       </div>
   {% endblock %}
 

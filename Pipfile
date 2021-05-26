@@ -11,6 +11,9 @@ python-dotenv = "*"
 flask-markdown = "*"
 flask-wtf = "*"
 flask-mail = "*"
+itsdangerous = "*"
+werkzeug = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

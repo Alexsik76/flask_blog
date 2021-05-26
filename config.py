@@ -17,6 +17,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = 'dev'
+    SECURITY_PASSWORD_SALT = 'my_precious_two'
     STATIC_FOLDER = 'app/static'
     TEMPLATES_FOLDER = 'app/templates'
     BASE_DIR = basedir
@@ -27,6 +28,15 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_COOKIE_SAMESITE = 'Lax'
     SESSION_COOKIE_SECURE = True
+    # --<email config:>--
+    MAIL_SERVER = 'smtp.i.ua'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'my_python@i.ua'
+    MAIL_PASSWORD = 'lyedth12'
+    MAIL_DEFAULT_SENDER = 'Site registration'
+
 
 
 class DevelopmentConfig(Config):
