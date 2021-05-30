@@ -2,10 +2,10 @@
 
 {% block app_content %}
     <h1> {% if current_user.is_authenticated %} Hi, {{ current_user.username }} {% else %} Hi, Guest {% endif %}</h1>
-    {% if form %}
-        {{ wtf.quick_form(form) }}
-        <br>
-    {% endif %}
+{#    {% if form %}#}
+{#        {{ wtf.quick_form(form) }}#}
+{#        <br>#}
+{#    {% endif %}#}
 {#    {% for post in posts %}#}
 {#        {% include '_post.html' %}#}
 {#    {% endfor %}#}

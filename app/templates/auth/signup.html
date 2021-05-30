@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+<form class="row" method="post">
+    {{ form.csrf_token }}
+  <div class="col-auto">
+    <label for="staticEmail2" class="visually-hidden">Email</label>
+      {{ form.email(type="email", class="form-control", id="staticEmail2", placeholder="email@example.com") }}
+    </div>
+  <div class="col-auto">
+      {{ form.submit(type="submit", class="btn btn-primary") }}
+  </div>
+</form>
+{% endblock %}
