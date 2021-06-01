@@ -23,6 +23,9 @@
         <div class="mb-3">
             <label for="password2" class="form-label">Repeat password</label>
             {{ form.password2(type="password", class="form-control", id="password2", placeholder="Password") }}
+            <div class="invalid-tooltip">
+                Please provide a valid city.
+            </div>
         </div>
         <div class="mb-3">
             {{ form.submit(type="submit", class="btn btn-primary") }}
