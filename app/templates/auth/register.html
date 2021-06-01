@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block app_content %}
+    <div style="width: 28rem;">
+    <form method="post">
+        {{ form.csrf_token }}
+        <div class="mb-3">
+            <label for="emailField" class="form-label">Email</label>
+            {{ form.email(type="email", class="form-control", id="emailField", disabled=True) }}
+        </div>
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            {{ form.first_name(class="form-control", id="firstName", placeholder="First Name") }}
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            {{ form.last_name(class="form-control", id="lastName", placeholder="Last Name") }}
+        </div>
+        <div class="mb-3">
+            <label for="password1" class="form-label">Password</label>
+            {{ form.password(type="password", class="form-control", id="password1", placeholder="Password") }}
+        </div>
+        <div class="mb-3">
+            <label for="password2" class="form-label">Repeat password</label>
+            {{ form.password2(type="password", class="form-control", id="password2", placeholder="Password") }}
+        </div>
+        <div class="mb-3">
+            {{ form.submit(type="submit", class="btn btn-primary") }}
+        </div>
+    </form>
+    {% for field in form.errors %}
+{% for error in form.errors[field] %}
+    <div  class="alert alert-danger" role="alert">{{ error }}</div>
+{% endfor %}
+{% endfor %}
+    </div>
+{% endblock %}

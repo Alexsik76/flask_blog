@@ -17,9 +17,12 @@ from app import mail
 #     send_async_email(msg)
 
 
-def send_email(app, msg):
-    with app.app_context():
-        mail.send(msg)
+def send_email(obj, msg):
+    with obj.app_context():
+        try:
+            mail.send(msg)
+        except Exception as e:
+            return e
 
 
 async def send_registration_email(email):
@@ -27,4 +30,8 @@ async def send_registration_email(email):
     token = serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
     msg = Message(subject='New user', recipients=[email])
     msg.body = render_template('email/register.txt', token=token)
+
     Thread(target=send_email, args=(current_app._get_current_object(), msg)).start()
+
+
+
