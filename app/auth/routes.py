@@ -1,6 +1,6 @@
 from flask import flash, redirect, render_template, url_for, current_app
 from app.auth import bp
-from app.auth.forms import SignUpForm, RegistrationForm
+from app.auth.forms import SignUpForm, RegistrationForm, LoginForm
 from app.auth.email import send_registration_email
 from itsdangerous import URLSafeTimedSerializer
 from app.models import User
@@ -17,7 +17,6 @@ async def signup():
         return redirect(url_for('main.index'))
     elif is_busy:
         flash(f'The email: {form.email.data} is used.', 'danger')
-
     return render_template('auth/signup.html', form=form)
 
 
@@ -39,3 +38,20 @@ def register(token):
         flash('You can log in', 'success')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)
+
+
+@bp.route('/login', methods=['GET', 'POST'])
+async def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if not user:
+            flash(f'User with email {form.email.data} not registered', 'danger')
+            return redirect(url_for('auth.signup'))
+        elif not user.check_password(form.password.data):
+            flash('Wrong password', 'danger')
+            return redirect(url_for('main.index'))
+        else:
+            flash('Successful login', 'success')
+            return redirect(url_for('main.index'))
+    return render_template('auth/login.html', form=form)
