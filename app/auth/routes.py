@@ -1,7 +1,8 @@
-from flask import flash, redirect, render_template, url_for, current_app
+from flask import flash, redirect, render_template, url_for, current_app, Markup, request
+from flask_login import login_user, login_required, logout_user
 from app.auth import bp
-from app.auth.forms import SignUpForm, RegistrationForm, LoginForm
-from app.auth.email import send_registration_email
+from app.auth.forms import SignUpForm, RegistrationForm, LoginForm, ResetPasswordForm, NewPasswordForm, LogoutForm
+from app.auth.email import send_registration_email, send_reset_password_email
 from itsdangerous import URLSafeTimedSerializer
 from app.models import User
 from app import db
@@ -16,7 +17,9 @@ async def signup():
         flash('To continue registration, follow the link in the letter.', 'info')
         return redirect(url_for('main.index'))
     elif is_busy:
-        flash(f'The email: {form.email.data} is used.', 'danger')
+        href = f"""<a href="{url_for('auth.login', email=form.email.data)}" class="danger-link">Log In</a>"""
+        message = f"The email: {form.email.data} is used. Please {href}."
+        flash(Markup(message), 'danger')
     return render_template('auth/signup.html', form=form)
 
 
@@ -41,8 +44,10 @@ def register(token):
 
 
 @bp.route('/login', methods=['GET', 'POST'])
-async def login():
+def login():
     form = LoginForm()
+    if email := request.args.get('email'):
+        form.email.data = email
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if not user:
@@ -52,6 +57,49 @@ async def login():
             flash('Wrong password', 'danger')
             return redirect(url_for('main.index'))
         else:
+            login_user(user)
             flash('Successful login', 'success')
             return redirect(url_for('main.index'))
     return render_template('auth/login.html', form=form)
+
+
+@bp.route('/log_out', methods=['GET', 'POST'])
+@login_required
+def log_out():
+    form = LogoutForm()
+    if form.is_submitted():
+        logout_user()
+        flash('You are logged out', 'info')
+        return redirect(url_for('main.index'))
+    return render_template('auth/log_out.html', form=form)
+
+
+@bp.route('/reset_password', methods=['GET', 'POST'])
+async def reset_password():
+    form = ResetPasswordForm()
+    is_present = bool(User.query.filter_by(email=form.email.data).first())
+    empty_email = not form.email.data
+    if form.validate_on_submit() and (is_present or empty_email):
+        await send_reset_password_email(form.email.data)
+        flash('To continue reset password, follow the link in the letter.', 'info')
+        return redirect(url_for('main.index'))
+    elif not is_present and not empty_email:
+        href = f"""<a href="{url_for('auth.signup', email=form.email.data)}" class="danger-link">Sign up</a>"""
+        message = f"The email: {form.email.data} not founded. Please {href}."
+        flash(Markup(message), 'danger')
+    return render_template('auth/signup.html', form=form)
+
+
+@bp.route('/new_password/<token>', methods=['GET', 'POST'])
+def new_password(token):
+    form = NewPasswordForm()
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    email = serializer.loads(token, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    form.email.data = email
+    user = User.query.filter_by(email=email).first()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Password was changed. You can log in', 'success')
+        return redirect(url_for('main.index'))
+    return render_template('auth/new_password.html', form=form)

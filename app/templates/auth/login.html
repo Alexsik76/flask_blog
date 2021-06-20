@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% block app_content %}
-    <form class="row" method="post">
+    <div class="mx-auto w-50">
+    <form class="row justify-content-center" method="post">
         {{ form.csrf_token }}
         <div class="col-auto">
             <label for="email" class="visually-hidden">Email</label>
-            {{ form.email(type="email", class="form-control", id="email", placeholder="email@example.com", focus=True) }}
+            {{ form.email(type="email", class="form-control", id="email",
+             placeholder="email@example.com", value=form.email.data, focus=True) }}
         </div>
         <div class="col-auto">
             <label for="password" class="visually-hidden">password</label>
@@ -14,4 +16,10 @@
             {{ form.submit(type="submit", class="btn btn-primary") }}
         </div>
     </form>
+        <div class="mx-auto w-50">
+            <div class="align-end">
+        <p>Forgot password? <a href="{{ url_for('auth.reset_password') }}">Reset</a> it.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

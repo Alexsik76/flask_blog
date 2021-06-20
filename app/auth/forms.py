@@ -8,6 +8,19 @@ class SignUpForm(FlaskForm):
     submit = SubmitField('Sign up')
 
 
+class ResetPasswordForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Reset password')
+
+
+class NewPasswordForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password',
+                             validators=[DataRequired(), EqualTo('password2', message='Passwords must match')])
+    password2 = PasswordField('Repeat password')
+    submit = SubmitField('Reset password')
+
+
 class RegistrationForm(FlaskForm):
     email = StringField('Email')
     first_name = StringField('First name', validators=[DataRequired()])
@@ -22,3 +35,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Log in')
+
+
+class LogoutForm(FlaskForm):
+    submit = SubmitField('Log out')

@@ -30,7 +30,14 @@ async def send_registration_email(email):
     token = serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
     msg = Message(subject='New user', recipients=[email])
     msg.body = render_template('email/register.txt', token=token)
+    Thread(target=send_email, args=(current_app._get_current_object(), msg)).start()
 
+
+async def send_reset_password_email(email):
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    token = serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    msg = Message(subject='Reset password', recipients=[email])
+    msg.body = render_template('email/reset_password.txt', token=token)
     Thread(target=send_email, args=(current_app._get_current_object(), msg)).start()
 
 

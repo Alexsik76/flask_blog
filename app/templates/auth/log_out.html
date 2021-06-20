@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block app_content %}
+    <div class="mx-auto w-50">
+    <h3 class="row justify-content-center">For the logging out, press button:</h3>
+    <form class="row justify-content-center" method="post">
+        {{ form.csrf_token }}
+                <div class="col-auto">
+            {{ form.submit(type="submit", class="btn btn-primary") }}
+        </div>
+    </form>
+    </div>
+{% endblock %}
