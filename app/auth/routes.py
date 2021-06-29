@@ -1,7 +1,8 @@
 from flask import flash, redirect, render_template, url_for, current_app, Markup, request
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from app.auth import bp
-from app.auth.forms import SignUpForm, RegistrationForm, LoginForm, ResetPasswordForm, NewPasswordForm, LogoutForm
+from app.auth.forms import SignUpForm, RegistrationForm, LoginForm, ResetPasswordForm, NewPasswordForm, \
+    LogoutForm, UserForm
 from app.auth.email import send_registration_email, send_reset_password_email
 from itsdangerous import URLSafeTimedSerializer
 from app.models import User
@@ -103,3 +104,18 @@ def new_password(token):
         flash('Password was changed. You can log in', 'success')
         return redirect(url_for('main.index'))
     return render_template('auth/new_password.html', form=form)
+
+
+@bp.route('/user_page', methods=['GET', 'POST'])
+@login_required
+def user_page():
+    form = UserForm(obj=current_user)
+    if form.validate_on_submit():
+        is_changed = False
+        for field in 'email', 'first_name', 'last_name':
+            if getattr(form, field).data is not getattr(current_user, field):
+                setattr(current_user, field, getattr(form, field).data)
+                is_changed = True
+        if is_changed:
+            db.session.commit()
+    return render_template('auth/user_page.html', form=form)

@@ -46,7 +46,7 @@
                   <ul class="nav navbar-nav justify-content-end">
                       {% if current_user.is_authenticated %}
                       <li class="nav-item">
-                          <p>Hello {{ current_user.first_name }}</p>
+                          <a class="nav-link" href={{ url_for('auth.user_page') }}>{{ current_user.first_name }}</a>
                       </li>
                       <li>
                           <a class="nav-link" href={{ url_for('auth.log_out') }}>Logout</a>

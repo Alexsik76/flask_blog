@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-
 {% block app_content %}
     <div class="mx-auto my-5 p-4 w-50 border border-2 rounded-3 bg-light">
-        <form class="row justify-content-center" method="post">
+        <form class="justify-content-center" method="post">
         {{ form.csrf_token }}
         <div class="mb-3">
             <label for="emailField" class="form-label">Email</label>
-            {{ form.email(type="email", class="form-control", id="emailField", disabled=True) }}
+            {{ form.email(type="email", class="form-control", id="emailField") }}
         </div>
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
@@ -17,15 +16,7 @@
             {{ form.last_name(class="form-control", id="lastName", placeholder="Last Name") }}
         </div>
         <div class="mb-3">
-            <label for="password1" class="form-label">Password</label>
-            {{ form.password(type="password", class="form-control", id="password1", placeholder="Password") }}
-        </div>
-        <div class="mb-3">
-            <label for="password2" class="form-label">Repeat password</label>
-            {{ form.password2(type="password", class="form-control", id="password2", placeholder="Password") }}
-            <div class="invalid-tooltip">
-                Please enter the same password.
-            </div>
+        <p>Change password? <a href="{{ url_for('auth.reset_password') }}">Reset</a> it.</p>
         </div>
         <div class="mb-3">
             {{ form.submit(type="submit", class="btn btn-primary") }}

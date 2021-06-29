@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block app_content %}
-    <div class="mx-auto w-50">
+    <div class="mx-auto m-5 p-4 w-50 border border-2 rounded-3 bg-light">
     <form class="row justify-content-center" method="post">
         {{ form.csrf_token }}
         <div class="col-auto">
@@ -10,16 +10,15 @@
         </div>
         <div class="col-auto">
             <label for="password" class="visually-hidden">password</label>
-            {{ form.password(type="password", class="form-control", id="password") }}
+            {{ form.password(type="password", class="form-control", id="password",
+            placeholder="password") }}
         </div>
         <div class="col-auto">
             {{ form.submit(type="submit", class="btn btn-primary") }}
         </div>
     </form>
-        <div class="mx-auto w-50">
-            <div class="align-end">
+        <div class="mx-auto align-end w-50">
         <p>Forgot password? <a href="{{ url_for('auth.reset_password') }}">Reset</a> it.</p>
-            </div>
         </div>
     </div>
 {% endblock %}
