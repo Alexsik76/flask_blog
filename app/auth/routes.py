@@ -67,12 +67,9 @@ def login():
 @bp.route('/log_out', methods=['GET', 'POST'])
 @login_required
 def log_out():
-    form = LogoutForm()
-    if form.is_submitted():
-        logout_user()
-        flash('You are logged out', 'info')
-        return redirect(url_for('main.index'))
-    return render_template('auth/log_out.html', form=form)
+    logout_user()
+    flash('You are logged out', 'info')
+    return redirect(url_for('main.index'))
 
 
 @bp.route('/reset_password', methods=['GET', 'POST'])
