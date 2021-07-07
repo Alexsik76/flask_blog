@@ -13,18 +13,19 @@ def index():
     return render_template('index.html', title='Home')
 
 
-@bp.route('/new_post')
+@bp.route('/new_post', methods=['GET', 'POST'])
 @login_required
 def create_post():
     form = CreatePostForm()
     if form.validate_on_submit():
         img = form.img.data
         filename = secure_filename(img.filename)
-        new_post = Post(
-            title=form.title.data,
-            body=form.body.data,
-            img=filename,
-            user_id=current_user.id
-        )
-
+        # new_post = Post(
+        #     title=form.title.data,
+        #     body=form.body.data,
+        #     img=filename,
+        #     user_id=current_user.id
+        # )
+        print(f"{filename = }")
+        return redirect(url_for('main.index'))
     return render_template('create_post.html', form=form)
