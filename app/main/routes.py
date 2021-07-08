@@ -1,4 +1,6 @@
-from flask import render_template, flash, redirect, url_for, request, g, jsonify, current_app
+import imghdr
+import os
+from flask import render_template, flash, redirect, url_for, request, g, jsonify, current_app, send_from_directory
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
@@ -11,6 +13,15 @@ from app.models import Post
 @login_required
 def index():
     return render_template('index.html', title='Home')
+
+
+def validate_image(stream):
+    header = stream.read(512)
+    stream.seek(0)
+    file_format = imghdr.what(None, header)
+    if not file_format:
+        return None
+    return '.' + (file_format if file_format != 'jpeg' else 'jpg')
 
 
 @bp.route('/new_post', methods=['GET', 'POST'])
