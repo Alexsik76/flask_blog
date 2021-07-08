@@ -1,10 +1,11 @@
 import imghdr
 import os
-from flask import render_template, flash, redirect, url_for, request, g, jsonify, current_app, send_from_directory
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
+from app import db
 from app.models import Post
 
 
@@ -12,7 +13,8 @@ from app.models import Post
 @bp.route('/index')
 @login_required
 def index():
-    return render_template('index.html', title='Home')
+    posts = Post.query.all()
+    return render_template('index.html', title='Home', posts=posts)
 
 
 def validate_image(stream):
@@ -31,12 +33,26 @@ def create_post():
     if form.validate_on_submit():
         img = form.img.data
         filename = secure_filename(img.filename)
-        # new_post = Post(
-        #     title=form.title.data,
-        #     body=form.body.data,
-        #     img=filename,
-        #     user_id=current_user.id
-        # )
-        print(f"{filename = }")
+        if os.path.splitext(filename)[1] != validate_image(img.stream):
+            flash('Files content is not valid!', 'danger')
+            return render_template('create_post.html', form=form)
+        img.save(os.path.join(current_app.config['UPLOAD_PATH'], current_user.get_id(), filename))
+        new_post = Post(
+            title=form.title.data,
+            body=form.body.data,
+            img=filename,
+            user_id=current_user.id
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        flash('You are created new post.', 'info')
         return redirect(url_for('main.index'))
     return render_template('create_post.html', form=form)
+
+
+@bp.route('/uploads/<filename>')
+@login_required
+def upload(filename):
+    img = send_from_directory(os.path.join(
+        current_app.config['UPLOAD_PATH'], current_user.get_id()), filename)
+    return img

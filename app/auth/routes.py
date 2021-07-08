@@ -1,8 +1,9 @@
+import os
 from flask import flash, redirect, render_template, url_for, current_app, Markup, request
 from flask_login import login_user, login_required, logout_user, current_user
 from app.auth import bp
 from app.auth.forms import SignUpForm, RegistrationForm, LoginForm, ResetPasswordForm, NewPasswordForm, UserForm
-from app.auth.email import send_registration_email, send_reset_password_email
+from app.auth.email import send_email
 from itsdangerous import URLSafeTimedSerializer
 from app.models import User
 from app import db
@@ -13,7 +14,7 @@ async def signup():
     form = SignUpForm()
     is_busy = bool(User.query.filter_by(email=form.email.data).first())
     if form.validate_on_submit() and not is_busy:
-        await send_registration_email(form.email.data)
+        await send_email(form.email.data, goal='registration')
         flash('To continue registration, follow the link in the letter.', 'info')
         return redirect(url_for('main.index'))
     elif is_busy:
@@ -38,6 +39,7 @@ def register(token):
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
+        os.mkdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id)))
         flash('You can log in', 'success')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)
@@ -75,15 +77,15 @@ def log_out():
 async def reset_password():
     form = ResetPasswordForm()
     is_present = bool(User.query.filter_by(email=form.email.data).first())
-    empty_email = not form.email.data
-    if form.validate_on_submit() and (is_present or empty_email):
-        await send_reset_password_email(form.email.data)
-        flash('To continue reset password, follow the link in the letter.', 'info')
-        return redirect(url_for('main.index'))
-    elif not is_present and not empty_email:
-        href = f"""<a href="{url_for('auth.signup', email=form.email.data)}" class="danger-link">Sign up</a>"""
-        message = f"The email: {form.email.data} not founded. Please {href}."
-        flash(Markup(message), 'danger')
+    if form.validate_on_submit():
+        if is_present:
+            await send_email(form.email.data, goal='reset')
+            flash('To continue reset password, follow the link in the letter.', 'info')
+            return redirect(url_for('main.index'))
+        else:
+            href = f"""<a href="{url_for('auth.signup', email=form.email.data)}" class="danger-link">Sign up</a>"""
+            message = f"The email: {form.email.data} not founded. Please {href}."
+            flash(Markup(message), 'danger')
     return render_template('auth/signup.html', form=form)
 
 

@@ -23,7 +23,7 @@ class Config(object):
     BASE_DIR = basedir
     MAX_CONTENT_LENGTH = 1024 * 1024
     UPLOAD_EXTENSIONS = ['jpg', 'png', 'gif']
-    UPLOAD_PATH = 'users_data'
+    UPLOAD_PATH = os.path.join(BASE_DIR, 'users_data')
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, 'app.db')
     # SQLALCHEMY_DATABASE_URI = os.environ.get(
     #     'DATABASE_URL') or f'postgresql+psycopg2://{DB_USER}:{DB_PW}@{DB_PATH}/{DB_NAME}'

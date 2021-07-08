@@ -5,7 +5,7 @@ from flask_mail import Message
 from app import mail
 
 
-def send_email(obj, msg):
+def async_send_email(obj, msg):
     with obj.app_context():
         try:
             mail.send(msg)
@@ -13,17 +13,11 @@ def send_email(obj, msg):
             return e
 
 
-async def send_registration_email(email):
+async def send_email(email, goal):
     serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     token = serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
-    msg = Message(subject='New user', recipients=[email])
-    msg.body = render_template('email/register.txt', token=token)
-    Thread(target=send_email, args=(current_app._get_current_object(), msg)).start()
-
-
-async def send_reset_password_email(email):
-    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    token = serializer.dumps(email, salt=current_app.config['SECURITY_PASSWORD_SALT'])
-    msg = Message(subject='Reset password', recipients=[email])
-    msg.body = render_template('email/reset_password.txt', token=token)
-    Thread(target=send_email, args=(current_app._get_current_object(), msg)).start()
+    subject, template = {'registration': ('New user', 'email/register.txt'),
+                         'reset': ('Reset password', 'email/reset_password.txt')}[goal]
+    msg = Message(subject=subject, recipients=[email])
+    msg.body = render_template(template, token=token)
+    Thread(target=async_send_email, args=(current_app._get_current_object(), msg)).start()
