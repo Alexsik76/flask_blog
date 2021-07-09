@@ -46,6 +46,9 @@
                   <ul class="nav navbar-nav justify-content-end">
                       {% if current_user.is_authenticated %}
                       <li class="nav-item">
+                          <a class="nav-link" href={{ url_for('admin.index') }}>Admin panel</a>
+                      </li>
+                      <li class="nav-item">
                           <a class="nav-link" href={{ url_for('auth.user_page') }}>{{ current_user.first_name }}</a>
                       </li>
                       <li>

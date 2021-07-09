@@ -1,6 +1,6 @@
 import imghdr
 import os
-from flask import render_template, flash, redirect, url_for, current_app, send_from_directory
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, request
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
@@ -53,6 +53,7 @@ def create_post():
 @bp.route('/uploads/<filename>')
 @login_required
 def upload(filename):
+    author_id = request.args.get('author_id')
     img = send_from_directory(os.path.join(
-        current_app.config['UPLOAD_PATH'], current_user.get_id()), filename)
+        current_app.config['UPLOAD_PATH'], author_id), filename)
     return img

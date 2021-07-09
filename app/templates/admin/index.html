@@ -1,6 +1,17 @@
 {% extends 'admin/master.html' %}
-
+{% block brand %}
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">Public page</a>
+{% endblock %}
 {% block body %}
   <p>Hello {{ current_user.first_name }}</p>
-    <p>You have some permissions. </p>
+    {%  if current_user.email == 'alex@jurist.vn.ua' %}
+    <p>You have admin permissions. </p>
+    {% elif current_user.is_authenticated %}
+      <p>You have permissions to the all posts. </p>
+    {% else %}
+     <p>You haven't any permissions. </p>
+    {% endif %}
+    {% if current_user.is_authenticated %}
+      <p> There are {{ number_of_users }} registered users.</p>
+    {% endif %}
 {% endblock %}

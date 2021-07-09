@@ -5,7 +5,6 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_admin import Admin
-
 from flask_mail import Mail
 from flaskext.markdown import Markdown
 
@@ -17,7 +16,8 @@ login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page.'
 mail = Mail()
-admin = Admin(name='flask_main', template_mode='bootstrap4')
+from app.auth.admin import MyHomeView
+admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeView())
 
 
 def create_app(test_config=False):
@@ -40,8 +40,6 @@ def create_app(test_config=False):
     Markdown(app)
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
-    # from app.create_db import init_app
-    # init_app(app)
 
     from app.main import bp
     app.register_blueprint(bp)
