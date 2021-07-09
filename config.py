@@ -20,10 +20,12 @@ class Config(object):
     SECURITY_PASSWORD_SALT = 'my_precious_two'
     STATIC_FOLDER = 'app/static'
     TEMPLATES_FOLDER = 'app/templates'
+    # --<upload config:>--
     BASE_DIR = basedir
     MAX_CONTENT_LENGTH = 1024 * 1024
     UPLOAD_EXTENSIONS = ['jpg', 'png', 'gif']
     UPLOAD_PATH = os.path.join(BASE_DIR, 'users_data')
+    # --<database config:>--
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, 'app.db')
     # SQLALCHEMY_DATABASE_URI = os.environ.get(
     #     'DATABASE_URL') or f'postgresql+psycopg2://{DB_USER}:{DB_PW}@{DB_PATH}/{DB_NAME}'
@@ -40,7 +42,8 @@ class Config(object):
     MAIL_DEFAULT_SENDER = 'my_python@i.ua'
     MAIL_SUPPRESS_SEND = False
     MAIL_DEBUG = True
-
+    # --<admin config:>--
+    FLASK_ADMIN_SWATCH = 'cerulean'
 
 class DevelopmentConfig(Config):
     DEBUG = True

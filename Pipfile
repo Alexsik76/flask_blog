@@ -15,6 +15,7 @@ itsdangerous = "*"
 werkzeug = "*"
 flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
+flask-admin = "*"
 
 [dev-packages]
 
