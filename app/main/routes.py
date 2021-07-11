@@ -50,10 +50,9 @@ def create_post():
     return render_template('create_post.html', form=form)
 
 
-@bp.route('/uploads/<filename>')
+@bp.route('/uploads/<author_id>/<filename>')
 @login_required
-def upload(filename):
-    author_id = request.args.get('author_id')
+def upload(author_id, filename):
     img = send_from_directory(os.path.join(
         current_app.config['UPLOAD_PATH'], author_id), filename)
     return img

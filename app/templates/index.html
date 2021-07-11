@@ -10,7 +10,7 @@
                 <p class="card-text"><small class="text-muted">Added by {{ post.author.first_name }}
                     at {{ post.timestamp.strftime("%d-%m-%y %H:%M") }} </small></p>
             </div>
-            <img src="{{ url_for('main.upload', filename=post.img, author_id=post.author.id) }}" class="card-img-bottom border border-secondary"
+            <img src="{{ url_for('main.upload', author_id=post.author.id, filename=post.img) }}" class="card-img-bottom border border-secondary"
                     style="height: 100%;
                     width: auto;
                     object-fit: contain;"
