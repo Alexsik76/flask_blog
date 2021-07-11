@@ -3,11 +3,13 @@ from flask_login import current_user
 from flask import redirect, request, url_for, flash
 from flask_admin import AdminIndexView, expose
 from app.models import User
+from flask import current_app
 
 
 class AppUserModelView(ModelView):
     def is_accessible(self):
-        return current_user.is_authenticated and getattr(current_user, 'email', None) == 'alex@jurist.vn.ua'
+        return current_user.is_authenticated and \
+               getattr(current_user, 'email', None) == current_app.config['FLASK_ADMIN_EMAIL']
 
     def inaccessible_callback(self, name, **kwargs):
         flash("You can't access this page", 'danger')

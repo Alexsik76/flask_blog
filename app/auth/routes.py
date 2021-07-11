@@ -39,7 +39,8 @@ def register(token):
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
-        os.mkdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id)))
+        if not os.path.isdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id))):
+            os.mkdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id)))
         flash('You can log in', 'success')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)

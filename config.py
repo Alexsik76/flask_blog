@@ -44,6 +44,7 @@ class Config(object):
     MAIL_DEBUG = True
     # --<admin config:>--
     FLASK_ADMIN_SWATCH = 'cerulean'
+    FLASK_ADMIN_EMAIL = 'alex@jurist.vn.ua'
 
 class DevelopmentConfig(Config):
     DEBUG = True
