@@ -9,6 +9,12 @@ from app.models import User
 from app import db
 
 
+def offer_to_log_in(email: str):
+    href = f"""<a href="{url_for('auth.login', email=email)}" class="danger-link">Log In</a>"""
+    message = f"The email: {email} is used. Please {href}."
+    flash(Markup(message), 'danger')
+
+
 @bp.route('/signup', methods=['GET', 'POST'])
 async def signup():
     form = SignUpForm()
@@ -18,9 +24,7 @@ async def signup():
         flash('To continue registration, follow the link in the letter.', 'info')
         return redirect(url_for('main.index'))
     elif is_busy:
-        href = f"""<a href="{url_for('auth.login', email=form.email.data)}" class="danger-link">Log In</a>"""
-        message = f"The email: {form.email.data} is used. Please {href}."
-        flash(Markup(message), 'danger')
+        offer_to_log_in(form.email.data)
     return render_template('auth/signup.html', form=form)
 
 
@@ -29,6 +33,9 @@ def register(token):
     form = RegistrationForm()
     serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
     email = serializer.loads(token, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    if bool(User.query.filter_by(email=email).first()):
+        offer_to_log_in(email)
+        return redirect(url_for('main.index'))
     form.email.data = email
     if form.validate_on_submit():
         new_user = User(
