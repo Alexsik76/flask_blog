@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.flaskenv'))
@@ -32,6 +33,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_COOKIE_SAMESITE = 'Lax'
     SESSION_COOKIE_SECURE = True
+    # PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     # --<email config:>--
     MAIL_SERVER = 'smtp.i.ua'
     MAIL_PORT = 465

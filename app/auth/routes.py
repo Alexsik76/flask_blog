@@ -1,4 +1,5 @@
 import os
+from functools import wraps
 from flask import flash, redirect, render_template, url_for, current_app, Markup, request
 from flask_login import login_user, login_required, logout_user, current_user
 from app.auth import bp
@@ -15,6 +16,22 @@ def offer_to_log_in(email: str):
     flash(Markup(message), 'danger')
 
 
+def get_email_from_token(token):
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    email = serializer.loads(token, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    return email
+
+
+def redirect_authenticated(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated and current_user.email == get_email_from_token(kwargs.get('token')):
+            email = get_email_from_token(kwargs.get('token'))
+            return redirect(url_for('main.index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @bp.route('/signup', methods=['GET', 'POST'])
 async def signup():
     form = SignUpForm()
@@ -29,10 +46,11 @@ async def signup():
 
 
 @bp.route('/register/<token>', methods=['GET', 'POST'])
+@redirect_authenticated
 def register(token):
     form = RegistrationForm()
-    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    email = serializer.loads(token, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    email = get_email_from_token(token)
+    print(f'{email =}')
     if bool(User.query.filter_by(email=email).first()):
         offer_to_log_in(email)
         return redirect(url_for('main.index'))
@@ -67,7 +85,7 @@ def login():
             flash('Wrong password', 'danger')
             return redirect(url_for('main.index'))
         else:
-            login_user(user)
+            login_user(user, remember=form.remember_me.data)
             flash('Successful login', 'success')
             return redirect(url_for('main.index'))
     return render_template('auth/login.html', form=form)

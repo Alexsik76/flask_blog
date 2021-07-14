@@ -3,20 +3,22 @@
     <div class="mx-auto m-5 p-4 w-75 border border-2 rounded-3 bg-light shadow">
     <form class="row justify-content-center" method="post">
         {{ form.csrf_token }}
-        <div class="col-auto">
-            <label for="email" class="visually-hidden">Email</label>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
             {{ form.email(type="email", class="form-control", id="email",
              placeholder="email@example.com", focus=True) }}
         </div>
-        <div class="col-auto">
-            <label for="password" class="visually-hidden">password</label>
+        <div class="mb-3">
+            <label for="password" class="form-label">password</label>
             {{ form.password(type="password", class="form-control", id="password",
             placeholder="password") }}
         </div>
-        <div class="col-auto">
+        <div class="mb-3">
+            {{ form.remember_me(class="check-box") }}
+        </div>
+        <div class="mb-3">
             {{ form.submit(type="submit", class="btn btn-primary") }}
         </div>
-    </form>
         <div class="mx-auto align-end w-50">
         <p>Forgot password? <a href="{{ url_for('auth.reset_password') }}">Reset</a> it.</p>
         </div>

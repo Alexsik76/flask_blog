@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for, current_app, send_f
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, user_logged_in
 from app import db
 from app.models import Post
 

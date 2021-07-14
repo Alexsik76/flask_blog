@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, flash
 from config import app_config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager
+from flask_login import LoginManager, user_logged_in
 from flask_admin import Admin
 from flask_mail import Mail
 from flaskext.markdown import Markdown
@@ -27,6 +27,9 @@ def create_app(test_config=False):
     else:
         app.config.from_object(app_config['develop'])
 
+    @user_logged_in.connect_via(app)
+    def login_info(sender, user):
+        print(f'User {user.first_name} {user.last_name} logged.')
     csrf.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
