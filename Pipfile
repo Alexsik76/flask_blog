@@ -16,6 +16,7 @@ werkzeug = "*"
 flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
 flask-admin = "*"
+turbo-flask = "*"
 
 [dev-packages]
 

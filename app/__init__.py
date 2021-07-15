@@ -1,4 +1,4 @@
-from flask import Flask, flash
+from flask import Flask, flash, render_template
 from config import app_config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -7,6 +7,7 @@ from flask_login import LoginManager, user_logged_in
 from flask_admin import Admin
 from flask_mail import Mail
 from flaskext.markdown import Markdown
+from turbo_flask import Turbo
 
 
 db = SQLAlchemy()
@@ -18,6 +19,7 @@ login.login_message = 'Please log in to access this page.'
 mail = Mail()
 from app.auth.admin import MyHomeView
 admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeView())
+turbo = Turbo()
 
 
 def create_app(test_config=False):
@@ -26,8 +28,6 @@ def create_app(test_config=False):
         app.config.from_object(app_config['testing'])
     else:
         app.config.from_object(app_config['develop'])
-
-    # @user_logged_in.connect_via(app)
 
     csrf.init_app(app)
     db.init_app(app)
@@ -48,11 +48,14 @@ def create_app(test_config=False):
     from app.auth import bp
     app.register_blueprint(bp)
 
+    turbo.init_app(app)
+
     @user_logged_in.connect_via(app)
     def login_info(sender, user):
         message = f'User logged. {sender}, {user}'
         print(message)
         flash(message, 'info')
+        turbo.push(turbo.replace(render_template('auth/_user_logged.html', user=user), 'user-logged-info'))
 
     return app
 
