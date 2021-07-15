@@ -27,9 +27,8 @@ def create_app(test_config=False):
     else:
         app.config.from_object(app_config['develop'])
 
-    @user_logged_in.connect_via(app)
-    def login_info(sender, user):
-        print(f'User {user.first_name} {user.last_name} logged.')
+    # @user_logged_in.connect_via(app)
+
     csrf.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
@@ -48,6 +47,12 @@ def create_app(test_config=False):
     app.register_blueprint(bp)
     from app.auth import bp
     app.register_blueprint(bp)
+
+    @user_logged_in.connect_via(app)
+    def login_info(sender, user):
+        message = f'User logged. {sender}, {user}'
+        print(message)
+        flash(message, 'info')
 
     return app
 

@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 from flask import flash, redirect, render_template, url_for, current_app, Markup, request
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user, current_user, user_logged_in
 from app.auth import bp
 from app.auth.forms import SignUpForm, RegistrationForm, LoginForm, ResetPasswordForm, NewPasswordForm, UserForm
 from app.auth.email import send_email
