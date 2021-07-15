@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "53b553d1b0516787d4ae05c7231e4f291c4c20ec9226e2f56e86571dc2ef446e"
+            "sha256": "2ae269429458c1842eff51c91df16a4fac5ebc56c66205ddc7ca55ca601502fe"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -371,11 +371,10 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:1de1db30d010ff1af14a009224ec49ab2329ad2cde454c8a708130642d579c42",
-                "sha256:6c1ec500dcdba0baa27600f6a22f6333d8b662d22027ff9f6202e3367413caa8"
+                "sha256:51d217659dd2e9b2518514b3cf1d2e2ea5084b07a33b557c7a4b931501a969d3"
             ],
-            "index": "pypi",
-            "version": "==2.0.1"
+            "path": "./werkzeug-main.zip",
+            "version": "==2.1.0.dev0"
         },
         "wsproto": {
             "hashes": [

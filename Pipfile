@@ -12,7 +12,7 @@ flask-markdown = "*"
 flask-wtf = "*"
 flask-mail = "*"
 itsdangerous = "*"
-werkzeug = "*"
+werkzeug = {path = "./werkzeug-main.zip"}
 flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
 flask-admin = "*"
