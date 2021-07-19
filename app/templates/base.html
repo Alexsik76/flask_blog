@@ -44,30 +44,27 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav justify-content-center">
-                    <li id="user-logged-info"></li>
+                <ul class="nav navbar-nav justify-content-end">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href={{ url_for('admin.index') }}>Admin panel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href={{ url_for('auth.user_page') }}>{{ current_user.first_name }}</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href={{ url_for('auth.log_out') }}>Logout</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a class="nav-link" href={{ url_for('auth.signup') }}>Signup</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href={{ url_for('auth.login') }}>Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
-                    <ul class="nav navbar-nav justify-content-end">
-                        {% if current_user.is_authenticated %}
-                            <li class="nav-item">
-                                <a class="nav-link" href={{ url_for('admin.index') }}>Admin panel</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   href={{ url_for('auth.user_page') }}>{{ current_user.first_name }}</a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href={{ url_for('auth.log_out') }}>Logout</a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a class="nav-link" href={{ url_for('auth.signup') }}>Signup</a>
-                            </li>
-                            <li>
-                                <a class="nav-link" href={{ url_for('auth.login') }}>Login</a>
-                            </li>
-                        {% endif %}
-                    </ul>
             </div>
         </div>
     </nav>
@@ -75,6 +72,7 @@
 
 {% block content %}
     <div class="container">
+        <div id="user-actions-info"></div>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}

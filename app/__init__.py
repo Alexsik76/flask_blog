@@ -6,7 +6,6 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, user_logged_in
 from flask_admin import Admin
 from flask_mail import Mail
-from flaskext.markdown import Markdown
 from turbo_flask import Turbo
 import threading
 
@@ -23,40 +22,33 @@ admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeVi
 turbo = Turbo()
 
 
-def create_app(test_config=False):
+def create_app(class_config=app_config['develop']):
     app = Flask(__name__)
-    if test_config:
-        app.config.from_object(app_config['testing'])
-    else:
-        app.config.from_object(app_config['develop'])
+    app.config.from_object(class_config)
 
-    csrf.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
     login.init_app(app)
     mail.init_app(app)
     admin.init_app(app)
+    turbo.init_app(app)
+
     from app.models import User, Post
     from app.auth.admin import AppUserModelView, AppPostModelView
     admin.add_view(AppUserModelView(User, db.session))
     admin.add_view(AppPostModelView(Post, db.session))
-    Markdown(app)
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
 
     from app.main import bp
     app.register_blueprint(bp)
+
     from app.auth import bp
     app.register_blueprint(bp)
 
-    turbo.init_app(app)
-
-    @user_logged_in.connect_via(app)
-    def login_info(sender, user):
-        message = f'User logged. {sender}, {user}'
-        print(message)
-        flash(message, 'info')
-        turbo.push(turbo.replace(render_template('auth/_user_logged.html', user=user), 'user-logged-info'))
+    from app.auth.extensions import live_log_in_info
+    live_log_in_info(app)
 
     return app
 

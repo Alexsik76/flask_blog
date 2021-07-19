@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 from flask import flash, redirect, render_template, url_for, current_app, Markup, request
-from flask_login import login_user, login_required, logout_user, current_user, user_logged_in
+from flask_login import login_user, login_required, logout_user, current_user
 from app.auth import bp
 from app.auth.forms import SignUpForm, RegistrationForm, LoginForm, ResetPasswordForm, NewPasswordForm, UserForm
 from app.auth.email import send_email
@@ -26,7 +26,6 @@ def redirect_authenticated(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.is_authenticated and current_user.email == get_email_from_token(kwargs.get('token')):
-            email = get_email_from_token(kwargs.get('token'))
             return redirect(url_for('main.index'))
         return f(*args, **kwargs)
     return decorated_function
