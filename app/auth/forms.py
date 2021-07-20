@@ -14,10 +14,14 @@ class ResetPasswordForm(FlaskForm):
 
 
 class NewPasswordForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email',
+                        validators=[DataRequired(), Email()],
+                        render_kw={'disabled': True})
     password = PasswordField('Password',
-                             validators=[DataRequired(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Repeat password')
+                             validators=[DataRequired()])
+    password2 = PasswordField('Repeat password',
+                              validators=[DataRequired(),
+                                          EqualTo('password', message='Passwords must match')])
     submit = SubmitField('Reset password')
 
 

@@ -1,10 +1,7 @@
 {% extends "base.html" %}
 {% block app_content %}
-    <div id="user-actions-info"></div>
     <h1> Hi, {{ current_user.first_name }} </h1>
-    {% if not form %}
     <a href={{ url_for('main.create_post') }}>New post</a>
-    {% endif %}
     {% for post in posts %}
         <div class="card" style="max-height: 50vh;">
             <div class="card-body">

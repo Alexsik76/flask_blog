@@ -126,6 +126,8 @@ def new_password(token):
         db.session.commit()
         flash('Password was changed. You can log in', 'success')
         return redirect(url_for('main.index'))
+    elif form.is_submitted():
+        return render_template('auth/new_password.html', form=form), 422
     return render_template('auth/new_password.html', form=form)
 
 
