@@ -72,7 +72,7 @@
 {% block content %}
     <div class="container">
         <div id="user-actions-info"> <!-- Turbo's target -->
-            <turbo-frame id="alerts">
+{#            <turbo-frame id="alerts">#}
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -80,7 +80,7 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-            </turbo-frame>
+{#            </turbo-frame>#}
         </div>
         <div class="h-100, p-5, bg-light, border rounded-3">
             {% block app_content %}{% endblock %}
