@@ -34,7 +34,9 @@ def create_post():
         img = form.img.data
         filename = secure_filename(img.filename)
         if os.path.splitext(filename)[1] != validate_image(img.stream):
-            return render_template('create_post.html', form=form), 422
+            print('file is not valid')
+            flash('Files content is not valid!', 'danger')
+            return render_template('create_post.html', form=form)
         img.save(os.path.join(current_app.config['UPLOAD_PATH'], current_user.get_id(), filename))
         new_post = Post(
             title=form.title.data,

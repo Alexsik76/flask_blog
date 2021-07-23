@@ -69,18 +69,19 @@
         </div>
     </nav>
 {% endblock %}
-
 {% block content %}
     <div class="container">
-    <div id="user-actions-info"> <!-- turbo-frame -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </div>
+        <div id="user-actions-info"> <!-- Turbo's target -->
+            <turbo-frame id="alerts">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </turbo-frame>
+        </div>
         <div class="h-100, p-5, bg-light, border rounded-3">
             {% block app_content %}{% endblock %}
         </div>
