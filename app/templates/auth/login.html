@@ -20,7 +20,8 @@
             {{ form.submit(type="submit", class="btn btn-primary") }}
         </div>
         <div class="mx-auto align-end w-50">
-        <p>Forgot password? <a href="{{ url_for('auth.reset_password') }}">Reset</a> it.</p>
+        <p>Forgot password? <a href="{{ url_for('auth.reset_password') }}">Reset it.</a></p>
         </div>
+    </form>
     </div>
 {% endblock %}
