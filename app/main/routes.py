@@ -4,9 +4,15 @@ from flask import render_template, flash, redirect, url_for, current_app, send_f
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user, user_logged_in
-from app import db
+from flask_login import login_required, current_user, logout_user
+from app import db, socketio
 from app.models import Post
+
+
+@socketio.on('disconnect')
+def disconnect_user():
+    print('djjdj')
+    logout_user()
 
 
 @bp.route('/')
@@ -34,7 +40,6 @@ def create_post():
         img = form.img.data
         filename = secure_filename(img.filename)
         if os.path.splitext(filename)[1] != validate_image(img.stream):
-            print('file is not valid')
             flash('Files content is not valid!', 'danger')
             return render_template('create_post.html', form=form)
         img.save(os.path.join(current_app.config['UPLOAD_PATH'], current_user.get_id(), filename))

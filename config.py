@@ -21,6 +21,7 @@ class Config(object):
     SECURITY_PASSWORD_SALT = 'my_precious_two'
     STATIC_FOLDER = 'app/static'
     TEMPLATES_FOLDER = 'app/templates'
+    # SESSION_PERMANENT = False
     # --<upload config:>--
     BASE_DIR = basedir
     MAX_CONTENT_LENGTH = 1024 * 1024
@@ -47,6 +48,7 @@ class Config(object):
     # --<admin config:>--
     FLASK_ADMIN_SWATCH = 'cerulean'
     FLASK_ADMIN_EMAIL = 'alex@jurist.vn.ua'
+
 
 class DevelopmentConfig(Config):
     DEBUG = True

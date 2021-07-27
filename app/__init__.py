@@ -1,4 +1,5 @@
-from flask import Flask, flash, render_template
+import logging
+from flask import Flask, session
 from config import app_config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -7,6 +8,7 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from flask_mail import Mail
 from turbo_flask import Turbo
+from flask_socketio import SocketIO
 import threading
 
 
@@ -17,6 +19,7 @@ login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page.'
 mail = Mail()
+socketio = SocketIO()
 from app.auth.admin import MyHomeView
 admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeView())
 turbo = Turbo()
@@ -25,12 +28,13 @@ turbo = Turbo()
 def create_app(class_config=app_config['develop']):
     app = Flask(__name__)
     app.config.from_object(class_config)
-
+    app.logger.setLevel(logging.INFO)
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
     login.init_app(app)
     mail.init_app(app)
+    socketio.init_app(app)
     admin.init_app(app)
     turbo.init_app(app)
 
