@@ -8,6 +8,7 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from flask_mail import Mail
 from turbo_flask import Turbo
+from simple_websocket import ConnectionClosed
 import threading
 
 
@@ -50,6 +51,14 @@ def create_app(class_config=app_config['develop']):
 
     from app.auth.extensions import live_log_in_info
     live_log_in_info(app)
+
+    @turbo.sock.route(app.config['TURBO_WEBSOCKET_ROUTE'])
+    def get_from_stream(ws):
+        try:
+            while True:
+                ws.receive(timeout=5)
+        except ConnectionClosed:
+            print('conclos!!!')
 
     return app
 

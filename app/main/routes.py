@@ -1,7 +1,7 @@
 import imghdr
 import os
-from flask import render_template, flash, redirect, url_for, current_app, send_from_directory
-from app import db
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, request, Response
+from app import db, turbo
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
@@ -24,6 +24,15 @@ def validate_image(stream):
     if not file_format:
         return None
     return '.' + (file_format if file_format != 'jpeg' else 'jpg')
+
+
+@bp.route('/_user_info', methods=['GET', 'POST'])
+def user_info():
+    print(request.form.values())
+    user = request.form.get('user_name', '') or 'Unknown user'
+    print(user)
+    turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
+    return Response(status=201)
 
 
 @bp.route('/new_post', methods=['GET', 'POST'])
