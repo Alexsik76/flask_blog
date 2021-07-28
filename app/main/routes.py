@@ -5,14 +5,7 @@ from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user, logout_user
-from app import db, socketio
 from app.models import Post
-
-
-@socketio.on('disconnect')
-def disconnect_user():
-    print('djjdj')
-    logout_user()
 
 
 @bp.route('/')

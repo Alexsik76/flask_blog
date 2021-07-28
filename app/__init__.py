@@ -8,7 +8,6 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from flask_mail import Mail
 from turbo_flask import Turbo
-from flask_socketio import SocketIO
 import threading
 
 
@@ -19,7 +18,6 @@ login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page.'
 mail = Mail()
-socketio = SocketIO()
 from app.auth.admin import MyHomeView
 admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeView())
 turbo = Turbo()
