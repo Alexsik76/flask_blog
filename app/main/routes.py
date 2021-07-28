@@ -1,10 +1,11 @@
 import imghdr
 import os
-from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, request
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory
+from app import db
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
-from flask_login import login_required, current_user, logout_user
+from flask_login import login_required, current_user
 from app.models import Post
 
 

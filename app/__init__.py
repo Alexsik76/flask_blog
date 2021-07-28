@@ -32,7 +32,6 @@ def create_app(class_config=app_config['develop']):
     csrf.init_app(app)
     login.init_app(app)
     mail.init_app(app)
-    socketio.init_app(app)
     admin.init_app(app)
     turbo.init_app(app)
 
