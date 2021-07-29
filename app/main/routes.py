@@ -28,9 +28,7 @@ def validate_image(stream):
 
 @bp.route('/_user_info', methods=['GET', 'POST'])
 def user_info():
-    print(request.form.values())
-    user = request.form.get('user_name', '') or 'Unknown user'
-    print(user)
+    user = request.form.get('user_name', 'Unknown user')
     turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
     return Response(status=201)
 

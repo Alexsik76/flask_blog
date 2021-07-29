@@ -71,15 +71,15 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-    <turbo-frame id="alerts">
+        <turbo-frame id="alerts">
             {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </turbo-frame>
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </turbo-frame>
         <div id="user-actions-info"></div>
         <div class="h-100, p-5, bg-light, border rounded-3">
             {% block app_content %}{% endblock %}
@@ -94,20 +94,10 @@
 <script>window.jQuery || document.write('<script src="{{
   url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
 <script type=text/javascript>
-  $SCRIPT_ROOT = {{ request.script_root|tojson }};
+    $SCRIPT_ROOT = {{ request.script_root|tojson }};
 </script>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<script>
-    var csrftoken = $('meta[name=csrf-token]').attr('content');
-
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken)
-        }
-    }
-})
-</script>
-<script src="{{url_for('static', filename='main.js')}}"></script>
+    <meta name="user-name" content="{{ current_user.first_name if current_user.is_authenticated }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>

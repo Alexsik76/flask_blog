@@ -1,17 +1,18 @@
-$(function() {
-    let user = 'Unknown'
-    if ($('#user-data').data() !== null){
-        user = $('#user-data').data('name');
-    }
-    // let user = ($('#user-data').data() == null) ? 'Unknown': $('#user-data').data('name');
-    console.log(user);
-    $(window).on('beforeunload', function() {
-        // e.preventDefault();
-        $.post('/_user_info', {'user_name': user}).done(function (){
-            // e.returnValue = "";
-            console.log('posted');
+$(function () {
+    $(window).on('beforeunload', function () {
+        let user = $('meta[name=user-name]').attr('content');
+        $.ajax({
+            url: $SCRIPT_ROOT + '/_user_info',
+            method: "POST",
+            data:
+                {
+                    user_name: user
+                },
+            headers:
+                {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            datatype: "json"
         });
-        // e.returnValue = "";
-        return false;
     });
-  });
+});
