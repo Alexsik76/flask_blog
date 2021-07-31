@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, session
+from flask import Flask
 from config import app_config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -7,11 +7,8 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_admin import Admin
 from flask_mail import Mail
-from turbo_flask import Turbo
-from simple_websocket import ConnectionClosed
-import threading
-from flask_socketio import SocketIO
-
+# from turbo_flask import Turbo
+from app.my_turbo import MyTurbo
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -22,8 +19,8 @@ login.login_message = 'Please log in to access this page.'
 mail = Mail()
 from app.auth.admin import MyHomeView
 admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeView())
-turbo = Turbo()
-socketio = SocketIO()
+turbo = MyTurbo()
+# socketio = SocketIO()
 
 
 def create_app(class_config=app_config['develop']):
@@ -37,7 +34,7 @@ def create_app(class_config=app_config['develop']):
     mail.init_app(app)
     admin.init_app(app)
     turbo.init_app(app)
-    socketio.init_app(app)
+    # socketio.init_app(app)
 
     from app.models import User, Post
     from app.auth.admin import AppUserModelView, AppPostModelView
@@ -54,14 +51,6 @@ def create_app(class_config=app_config['develop']):
 
     from app.auth.extensions import live_log_in_info
     live_log_in_info(app)
-
-    # @turbo.sock.route(app.config['TURBO_WEBSOCKET_ROUTE'])
-    # def get_from_stream(ws):
-    #     try:
-    #         while True:
-    #             ws.receive(timeout=5)
-    #     except ConnectionClosed:
-    #         print('conclos!!!')
 
     return app
 

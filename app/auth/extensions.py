@@ -1,6 +1,6 @@
 from flask import render_template, request, appcontext_tearing_down
 from flask_login import user_logged_in, user_logged_out, current_user
-from app import turbo, socketio
+from app import turbo
 
 
 def live_log_in_info(app):
@@ -18,7 +18,7 @@ def live_log_in_info(app):
     # def context_info(sender, exc):
     #     print('Context!!!')
 
-    @socketio.on('disconnect')
-    def test_disconnect():
-        if current_user.is_authenticated:
-            print(f'{current_user.first_name} disconnected')
+    # @socketio.on('disconnect')
+    # def test_disconnect():
+    #     if current_user.is_authenticated:
+    #         print(f'{current_user.first_name} disconnected')
