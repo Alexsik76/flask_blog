@@ -24,7 +24,7 @@ class Config(object):
     # SESSION_PERMANENT = False
     # --<upload config:>--
     BASE_DIR = basedir
-    MAX_CONTENT_LENGTH = 1024 * 1024
+    MAX_CONTENT_LENGTH = 1024 * 1024 * 10
     UPLOAD_EXTENSIONS = ['jpg', 'png', 'gif']
     UPLOAD_PATH = os.path.join(BASE_DIR, 'users_data')
     # --<database config:>--

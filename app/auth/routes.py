@@ -49,7 +49,6 @@ async def signup():
 def register(token):
     form = RegistrationForm()
     email = get_email_from_token(token)
-    print(f'{email =}')
     if bool(User.query.filter_by(email=email).first()):
         offer_to_log_in(email)
         return redirect(url_for('main.index'))

@@ -1,6 +1,6 @@
 import imghdr
 import os
-from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, request, Response
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, Response
 from app import db, turbo
 from app.main import bp
 from app.main.forms import CreatePostForm
@@ -26,11 +26,11 @@ def validate_image(stream):
     return '.' + (file_format if file_format != 'jpeg' else 'jpg')
 
 
-@bp.route('/_user_info', methods=['GET', 'POST'])
+@bp.route('/_user_info')
 def user_info():
-    user = request.form.get('user_name', 'Unknown user')
+    user = current_user.first_name if current_user.is_authenticated else current_user
     turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
-    return Response(status=201)
+    return Response(status=200)
 
 
 @bp.route('/new_post', methods=['GET', 'POST'])
@@ -40,7 +40,9 @@ def create_post():
     if form.validate_on_submit():
         img = form.img.data
         filename = secure_filename(img.filename)
-        if os.path.splitext(filename)[1] != validate_image(img.stream):
+        file_ext = os.path.splitext(filename)[1].lower()
+        from_stream_ext = validate_image(img.stream)
+        if file_ext != from_stream_ext:
             flash('Files content is not valid!', 'danger')
             return render_template('create_post.html', form=form)
         img.save(os.path.join(current_app.config['UPLOAD_PATH'], current_user.get_id(), filename))

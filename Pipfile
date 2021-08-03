@@ -16,7 +16,6 @@ flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
 flask-admin = "*"
 turbo-flask = "*"
-flask-socketio = "*"
 
 [dev-packages]
 

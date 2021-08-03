@@ -7,8 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask_admin import Admin
 from flask_mail import Mail
-# from turbo_flask import Turbo
-from app.my_turbo import MyTurbo
+from turbo_flask import Turbo
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -19,8 +18,7 @@ login.login_message = 'Please log in to access this page.'
 mail = Mail()
 from app.auth.admin import MyHomeView
 admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeView())
-turbo = MyTurbo()
-# socketio = SocketIO()
+turbo = Turbo()
 
 
 def create_app(class_config=app_config['develop']):
@@ -34,12 +32,12 @@ def create_app(class_config=app_config['develop']):
     mail.init_app(app)
     admin.init_app(app)
     turbo.init_app(app)
-    # socketio.init_app(app)
 
     from app.models import User, Post
     from app.auth.admin import AppUserModelView, AppPostModelView
     admin.add_view(AppUserModelView(User, db.session))
     admin.add_view(AppPostModelView(Post, db.session))
+
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
 
