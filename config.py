@@ -1,7 +1,6 @@
 import os
 from distutils.util import strtobool
 from dotenv import load_dotenv
-from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.flaskenv'))
@@ -45,7 +44,6 @@ class Config(object):
     MAIL_PASSWORD = get_env_variable('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = get_env_variable('MAIL_DEFAULT_SENDER')
     MAIL_SUPPRESS_SEND = bool(strtobool(get_env_variable('MAIL_SUPPRESS_SEND')))
-    MAIL_DEBUG = DEBUG
     # --<admin config:>--
     FLASK_ADMIN_SWATCH = 'cerulean'
     FLASK_ADMIN_EMAIL = 'alex@jurist.vn.ua'
@@ -54,6 +52,7 @@ class Config(object):
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = True
+    MAIL_DEBUG = True
 
 
 class TestingConfig(Config):
