@@ -1,11 +1,11 @@
 import imghdr
 import os
-from flask import render_template, flash, redirect, url_for, current_app, send_from_directory
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, Response
+from app import db, turbo
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
 from flask_login import login_required, current_user
-from app import db
 from app.models import Post
 
 
@@ -26,6 +26,13 @@ def validate_image(stream):
     return '.' + (file_format if file_format != 'jpeg' else 'jpg')
 
 
+@bp.route('/_user_info')
+def user_info():
+    user = current_user.first_name if current_user.is_authenticated else current_user
+    turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
+    return Response(status=200)
+
+
 @bp.route('/new_post', methods=['GET', 'POST'])
 @login_required
 def create_post():
@@ -33,7 +40,9 @@ def create_post():
     if form.validate_on_submit():
         img = form.img.data
         filename = secure_filename(img.filename)
-        if os.path.splitext(filename)[1] != validate_image(img.stream):
+        file_ext = os.path.splitext(filename)[1].lower()
+        from_stream_ext = validate_image(img.stream)
+        if file_ext != from_stream_ext:
             flash('Files content is not valid!', 'danger')
             return render_template('create_post.html', form=form)
         img.save(os.path.join(current_app.config['UPLOAD_PATH'], current_user.get_id(), filename))
@@ -50,9 +59,9 @@ def create_post():
     return render_template('create_post.html', form=form)
 
 
-@bp.route('/uploads/<filename>')
+@bp.route('/uploads/<author_id>/<filename>')
 @login_required
-def upload(filename):
+def upload(author_id, filename):
     img = send_from_directory(os.path.join(
-        current_app.config['UPLOAD_PATH'], current_user.get_id()), filename)
+        current_app.config['UPLOAD_PATH'], author_id), filename)
     return img

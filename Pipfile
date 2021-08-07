@@ -8,13 +8,14 @@ flask = {extras = ["async"], version = "*"}
 flask-sqlalchemy = "*"
 flask-login = "*"
 python-dotenv = "*"
-flask-markdown = "*"
 flask-wtf = "*"
 flask-mail = "*"
 itsdangerous = "*"
-werkzeug = "*"
+werkzeug = {path = "./werkzeug-main.zip"}
 flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
+flask-admin = "*"
+turbo-flask = "*"
 
 [dev-packages]
 

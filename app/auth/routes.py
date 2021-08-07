@@ -1,4 +1,5 @@
 import os
+from functools import wraps
 from flask import flash, redirect, render_template, url_for, current_app, Markup, request
 from flask_login import login_user, login_required, logout_user, current_user
 from app.auth import bp
@@ -7,6 +8,27 @@ from app.auth.email import send_email
 from itsdangerous import URLSafeTimedSerializer
 from app.models import User
 from app import db
+
+
+def offer_to_log_in(email: str):
+    href = f"""<a href="{url_for('auth.login', email=email)}" class="danger-link">Log In</a>"""
+    message = f"The email: {email} is used. Please {href}."
+    flash(Markup(message), 'danger')
+
+
+def get_email_from_token(token):
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    email = serializer.loads(token, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    return email
+
+
+def redirect_authenticated(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated and current_user.email == get_email_from_token(kwargs.get('token')):
+            return redirect(url_for('main.index'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @bp.route('/signup', methods=['GET', 'POST'])
@@ -18,17 +40,18 @@ async def signup():
         flash('To continue registration, follow the link in the letter.', 'info')
         return redirect(url_for('main.index'))
     elif is_busy:
-        href = f"""<a href="{url_for('auth.login', email=form.email.data)}" class="danger-link">Log In</a>"""
-        message = f"The email: {form.email.data} is used. Please {href}."
-        flash(Markup(message), 'danger')
+        offer_to_log_in(form.email.data)
     return render_template('auth/signup.html', form=form)
 
 
 @bp.route('/register/<token>', methods=['GET', 'POST'])
+@redirect_authenticated
 def register(token):
     form = RegistrationForm()
-    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    email = serializer.loads(token, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    email = get_email_from_token(token)
+    if bool(User.query.filter_by(email=email).first()):
+        offer_to_log_in(email)
+        return redirect(url_for('main.index'))
     form.email.data = email
     if form.validate_on_submit():
         new_user = User(
@@ -39,7 +62,8 @@ def register(token):
         new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
-        os.mkdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id)))
+        if not os.path.isdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id))):
+            os.mkdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id)))
         flash('You can log in', 'success')
         return redirect(url_for('main.index'))
     return render_template('auth/register.html', form=form)
@@ -59,7 +83,7 @@ def login():
             flash('Wrong password', 'danger')
             return redirect(url_for('main.index'))
         else:
-            login_user(user)
+            login_user(user, remember=form.remember_me.data)
             flash('Successful login', 'success')
             return redirect(url_for('main.index'))
     return render_template('auth/login.html', form=form)
@@ -76,6 +100,9 @@ def log_out():
 @bp.route('/reset_password', methods=['GET', 'POST'])
 async def reset_password():
     form = ResetPasswordForm()
+    if current_user.is_authenticated:
+        form.email.data = current_user.email
+        form.email.render_kw = {'disabled': True}
     is_present = bool(User.query.filter_by(email=form.email.data).first())
     if form.validate_on_submit():
         if is_present:
@@ -84,7 +111,7 @@ async def reset_password():
             return redirect(url_for('main.index'))
         else:
             href = f"""<a href="{url_for('auth.signup', email=form.email.data)}" class="danger-link">Sign up</a>"""
-            message = f"The email: {form.email.data} not founded. Please {href}."
+            message = f"The email: {form.email.data} not founded. Please {href} or use correct email."
             flash(Markup(message), 'danger')
     return render_template('auth/signup.html', form=form)
 
@@ -101,6 +128,8 @@ def new_password(token):
         db.session.commit()
         flash('Password was changed. You can log in', 'success')
         return redirect(url_for('main.index'))
+    elif form.is_submitted():
+        return render_template('auth/new_password.html', form=form), 422
     return render_template('auth/new_password.html', form=form)
 
 

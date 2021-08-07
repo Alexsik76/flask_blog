@@ -3,14 +3,18 @@
     <h1> Hi, {{ current_user.first_name }} </h1>
     <a href={{ url_for('main.create_post') }}>New post</a>
     {% for post in posts %}
-    <div class="card" style="max-height: 50vh;">
-        <div class="card-body">
-            <h5 class="card-title">{{ post.title }}</h5>
-            <p class="card-text">{{ post.body }}</p>
-            <p class="card-text"><small class="text-muted">Added by {{ post.author.first_name }} at {{ post.timestamp.strftime("%d-%m-%y %H:%M") }} </small></p>
+        <div class="card" style="max-height: 50vh;">
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.body }}</p>
+                <p class="card-text"><small class="text-muted">Added by {{ post.author.first_name }}
+                    at {{ post.timestamp.strftime("%d-%m-%y %H:%M") }} </small></p>
+            </div>
+            <img src="{{ url_for('main.upload', author_id=post.author.id, filename=post.img) }}" class="card-img-bottom border border-secondary"
+                    style="height: 100%;
+                    width: auto;
+                    object-fit: contain;"
+             alt="No image">
         </div>
-        <img src="{{ url_for('main.upload', filename=post.img) }}"
-             class="card-img-bottom" style="height: 100%; width: auto; object-fit: contain;" alt="No image">
-    </div>
     {% endfor %}
 {% endblock %}
