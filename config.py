@@ -26,8 +26,8 @@ class Config(object):
     BASE_DIR = basedir
     MAX_CONTENT_LENGTH = 1024 * 1024 * 10
     UPLOAD_EXTENSIONS = ['jpg', 'png', 'gif']
-    if not os.path.isdir(os.path.join(BASE_DIR), 'users_data'):
-        os.mkdir(os.path.join(os.path.join(BASE_DIR), 'users_data'))
+    if not os.path.isdir(os.path.join(BASE_DIR, 'users_data')):
+        os.mkdir(os.path.join(BASE_DIR, 'users_data'))
     UPLOAD_PATH = os.path.join(BASE_DIR, 'users_data')
     # --<database config:>--
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, 'app.db')
