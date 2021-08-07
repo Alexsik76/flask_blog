@@ -1,4 +1,5 @@
 import os
+from distutils.util import strtobool
 from dotenv import load_dotenv
 from datetime import timedelta
 
@@ -36,15 +37,15 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
     # PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     # --<email config:>--
-    MAIL_SERVER = 'smtp.i.ua'
-    MAIL_PORT = 465
-    MAIL_USE_TLS = False
-    MAIL_USE_SSL = True
-    MAIL_USERNAME = 'my_python@i.ua'
-    MAIL_PASSWORD = 'lyedth12'
-    MAIL_DEFAULT_SENDER = 'my_python@i.ua'
-    MAIL_SUPPRESS_SEND = False
-    MAIL_DEBUG = True
+    MAIL_SERVER = get_env_variable('MAIL_SERVER')
+    MAIL_PORT = int(get_env_variable('MAIL_PORT'))
+    MAIL_USE_TLS = bool(strtobool(get_env_variable('MAIL_USE_TLS')))
+    MAIL_USE_SSL = bool(strtobool(get_env_variable('MAIL_USE_SSL')))
+    MAIL_USERNAME = get_env_variable('MAIL_USERNAME')
+    MAIL_PASSWORD = get_env_variable('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = get_env_variable('MAIL_DEFAULT_SENDER')
+    MAIL_SUPPRESS_SEND = bool(strtobool(get_env_variable('MAIL_SUPPRESS_SEND')))
+    MAIL_DEBUG = DEBUG
     # --<admin config:>--
     FLASK_ADMIN_SWATCH = 'cerulean'
     FLASK_ADMIN_EMAIL = 'alex@jurist.vn.ua'

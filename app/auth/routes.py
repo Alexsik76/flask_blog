@@ -100,6 +100,9 @@ def log_out():
 @bp.route('/reset_password', methods=['GET', 'POST'])
 async def reset_password():
     form = ResetPasswordForm()
+    if current_user.is_authenticated:
+        form.email.data = current_user.email
+        form.email.render_kw = {'disabled': True}
     is_present = bool(User.query.filter_by(email=form.email.data).first())
     if form.validate_on_submit():
         if is_present:
@@ -108,7 +111,7 @@ async def reset_password():
             return redirect(url_for('main.index'))
         else:
             href = f"""<a href="{url_for('auth.signup', email=form.email.data)}" class="danger-link">Sign up</a>"""
-            message = f"The email: {form.email.data} not founded. Please {href}."
+            message = f"The email: {form.email.data} not founded. Please {href} or use correct email."
             flash(Markup(message), 'danger')
     return render_template('auth/signup.html', form=form)
 
