@@ -1,0 +1,3 @@
+Hello!
+For the continue registration, click on the following link:
+{{ url_for('auth.register', token=token, _external=True) }}

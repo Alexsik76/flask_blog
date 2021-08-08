@@ -1,0 +1,20 @@
+{% macro field_with_class(name, type, displayed_name='') -%}
+    {% if displayed_name == ''  %}
+        {% set displayed_name = name|capitalize %}
+    {% endif %}
+    <div class="mb-3">
+        <label for="{{ name }}" class="form-label">{{ displayed_name }}</label>
+        {% if form.errors[name] %}
+            {% set field_class="is-invalid" %}
+        {% elif form.is_submited %}
+            {% set field_class="is-valid" %}
+        {% endif %}
+        <input type="{{ type }}" class="form-control {{ field_class }}" name="{{ name }}"
+               id="{{ name }}" placeholder="{{ displayed_name }}">
+        {% for error in form.errors[name] %}
+            <div class="invalid-feedback" style="display: block">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </div>
+{%- endmacro %}

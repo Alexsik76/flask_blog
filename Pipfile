@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = {extras = ["async"], version = "*"}
+flask-sqlalchemy = "*"
+flask-login = "*"
+python-dotenv = "*"
+flask-wtf = "*"
+flask-mail = "*"
+itsdangerous = "*"
+werkzeug = {path = "./werkzeug-main.zip"}
+flask-migrate = "*"
+wtforms = {extras = ["email"], version = "*"}
+flask-admin = "*"
+turbo-flask = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
