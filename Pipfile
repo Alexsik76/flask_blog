@@ -17,6 +17,7 @@ wtforms = {extras = ["email"], version = "*"}
 flask-admin = "*"
 turbo-flask = "*"
 gunicorn = "*"
+gevent = "*"
 
 [dev-packages]
 
