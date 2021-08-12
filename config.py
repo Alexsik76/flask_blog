@@ -30,12 +30,10 @@ class Config(object):
         os.mkdir(os.path.join(BASE_DIR, 'users_data'))
     UPLOAD_PATH = os.path.join(BASE_DIR, 'users_data')
     # --<database config:>--
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(BASE_DIR, 'app.db')
-    # SQLALCHEMY_DATABASE_URI = os.environ.get(
-    #     'DATABASE_URL') or f'postgresql+psycopg2://{DB_USER}:{DB_PW}@{DB_PATH}/{DB_NAME}'
+    SQLALCHEMY_DATABASE_URI = get_env_variable('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SESSION_COOKIE_SAMESITE = 'Lax'
-    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = False
     # PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     # --<email config:>--
     MAIL_SERVER = get_env_variable('MAIL_SERVER')

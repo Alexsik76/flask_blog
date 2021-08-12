@@ -32,11 +32,11 @@ def redirect_authenticated(f):
 
 
 @bp.route('/signup', methods=['GET', 'POST'])
-async def signup():
+def signup():
     form = SignUpForm()
     is_busy = bool(User.query.filter_by(email=form.email.data).first())
     if form.validate_on_submit() and not is_busy:
-        await send_email(form.email.data, goal='registration')
+        send_email(form.email.data, goal='registration')
         flash('To continue registration, follow the link in the letter.', 'info')
         return redirect(url_for('main.index'))
     elif is_busy:
@@ -98,7 +98,7 @@ def log_out():
 
 
 @bp.route('/reset_password', methods=['GET', 'POST'])
-async def reset_password():
+def reset_password():
     form = ResetPasswordForm()
     if current_user.is_authenticated:
         form.email.data = current_user.email
@@ -106,7 +106,7 @@ async def reset_password():
     is_present = bool(User.query.filter_by(email=form.email.data).first())
     if form.validate_on_submit():
         if is_present:
-            await send_email(form.email.data, goal='reset')
+            send_email(form.email.data, goal='reset')
             flash('To continue reset password, follow the link in the letter.', 'info')
             return redirect(url_for('main.index'))
         else:
