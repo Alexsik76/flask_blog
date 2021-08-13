@@ -14,6 +14,12 @@ def get_env_variable(name):
         raise Exception(message)
 
 
+def get_path_safe(path, folder):
+    if not os.path.isdir(os.path.join(path, folder)):
+        os.mkdir(os.path.join(path, folder))
+    return os.path.join(path, folder)
+
+
 class Config(object):
     DEBUG = False
     TESTING = False
@@ -26,9 +32,7 @@ class Config(object):
     BASE_DIR = basedir
     MAX_CONTENT_LENGTH = 1024 * 1024 * 10
     UPLOAD_EXTENSIONS = ['jpg', 'png', 'gif']
-    if not os.path.isdir(os.path.join(BASE_DIR, 'users_data')):
-        os.mkdir(os.path.join(BASE_DIR, 'users_data'))
-    UPLOAD_PATH = os.path.join(BASE_DIR, 'users_data')
+    UPLOAD_PATH = get_path_safe(BASE_DIR, 'users_data')
     # --<database config:>--
     SQLALCHEMY_DATABASE_URI = get_env_variable('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False

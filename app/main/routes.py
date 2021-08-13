@@ -5,8 +5,10 @@ from app import db, turbo
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import NotFound
 from flask_login import login_required, current_user
 from app.models import Post
+from config import get_path_safe
 
 
 @bp.route('/')
@@ -45,7 +47,7 @@ def create_post():
         if file_ext != from_stream_ext:
             flash('Files content is not valid!', 'danger')
             return render_template('create_post.html', form=form)
-        img.save(os.path.join(current_app.config['UPLOAD_PATH'], current_user.get_id(), filename))
+        img.save(os.path.join(get_path_safe(current_app.config['UPLOAD_PATH'], current_user.get_id()), filename))
         new_post = Post(
             title=form.title.data,
             body=form.body.data,
@@ -62,6 +64,11 @@ def create_post():
 @bp.route('/uploads/<author_id>/<filename>')
 @login_required
 def upload(author_id, filename):
-    img = send_from_directory(os.path.join(
-        current_app.config['UPLOAD_PATH'], author_id), filename)
+    try:
+        img = send_from_directory(os.path.join(
+            current_app.config['UPLOAD_PATH'], author_id), filename)
+    except NotFound:
+        img = send_from_directory(os.path.join(current_app.config['BASE_DIR'],
+                                               current_app.config['STATIC_FOLDER']),
+                                  'not-found.png')
     return img
