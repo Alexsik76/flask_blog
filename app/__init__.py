@@ -18,7 +18,7 @@ login.login_message = 'Please log in to access this page.'
 mail = Mail()
 from app.auth.admin import MyHomeView
 admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeView())
-# turbo = Turbo()
+turbo = Turbo()
 
 
 def create_app(config='develop'):
@@ -31,7 +31,7 @@ def create_app(config='develop'):
     login.init_app(app)
     mail.init_app(app)
     admin.init_app(app)
-#    turbo.init_app(app)
+    turbo.init_app(app)
 
     from app.models import User, Post
     from app.auth.admin import AppUserModelView, AppPostModelView
@@ -47,8 +47,8 @@ def create_app(config='develop'):
     from app.auth import bp
     app.register_blueprint(bp)
 
-#    from app.auth.extensions import live_log_in_info
-#    live_log_in_info(app)
+    from app.auth.extensions import live_log_in_info
+    live_log_in_info(app)
 
     return app
 
