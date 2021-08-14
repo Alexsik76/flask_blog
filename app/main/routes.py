@@ -45,8 +45,8 @@ def create_post():
         file_ext = os.path.splitext(filename)[1].lower()
         from_stream_ext = validate_image(img.stream)
         if file_ext != from_stream_ext:
-            flash('Files content is not valid!', 'danger')
-            return render_template('create_post.html', form=form)
+            error = 'Files content is not valid!'
+            return render_template('create_post.html', form=form, error=error)
         img.save(os.path.join(get_path_safe(current_app.config['UPLOAD_PATH'], current_user.get_id()), filename))
         new_post = Post(
             title=form.title.data,

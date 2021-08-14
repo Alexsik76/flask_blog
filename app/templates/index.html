@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 {% block app_content %}
+    <turbo-frame id="alerts">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </turbo-frame>
+        <div id="user-actions-info"></div>
     <h1> Hi, {{ current_user.first_name }} </h1>
     <a href={{ url_for('main.create_post') }}>New post</a>
     {% for post in posts %}
