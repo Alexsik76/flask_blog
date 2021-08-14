@@ -12,7 +12,7 @@
         {% block title %} {{ title }} {% endblock %}
     </title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='flask-icon.png') }}">
-    {{ turbo() }}
+{#   {{ turbo() }} #}
 </head>
 <body>
 {% block navbar %}
@@ -91,7 +91,7 @@
     $SCRIPT_ROOT = {{ request.url_root|tojson }};
 </script>
     <meta name="user-name" content="{{ current_user.first_name if current_user.is_authenticated }}">
-<script src="{{ url_for('static', filename='main.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='main.js') }}"></script> -->
 
 </body>
 </html>

@@ -11,13 +11,13 @@ python-dotenv = "*"
 flask-wtf = "*"
 flask-mail = "*"
 itsdangerous = "*"
-werkzeug = {path = "./werkzeug-main.zip"}
 flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
 flask-admin = "*"
 turbo-flask = "*"
 gunicorn = "*"
 pymysql = "*"
+werkzeug = "*"
 
 [dev-packages]
 

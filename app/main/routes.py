@@ -1,7 +1,7 @@
 import imghdr
 import os
 from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, Response
-from app import db, turbo
+from app import db
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.utils import secure_filename
@@ -31,7 +31,7 @@ def validate_image(stream):
 @bp.route('/_user_info')
 def user_info():
     user = current_user.first_name if current_user.is_authenticated else current_user
-    turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
+    #turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
     return Response(status=200)
 
 
