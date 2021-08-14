@@ -3,22 +3,11 @@
     <div class="mx-auto my-5 p-4 w-50 border border-2 rounded-3 bg-light shadow">
  <turbo-frame id="new_post_form">
             <form class="justify-content-center" method="post" enctype="multipart/form-data">
+            {% from 'user_macro.html' import field_with_class with context %}
                 {{ form.csrf_token }}
-                <div class="mb-3">
-                    <label for="titleField" class="form-label">Title</label>
-                    {{ form.title(class="form-control", id="titleField") }}
-                </div>
-                <div class="mb-3">
-                    <label for="bodyField" class="form-label">Posts text</label>
-                    {{ form.body(class="form-control", id="bodyField", placeholder="Enter your post here.") }}
-                </div>
-                <div class="mb-3">
-                    <label for="imgField" class="form-label">Select picture</label>
-                    {{ form.img(class="form-control", id="imgField", placeholder="Upload picture") }}
-                </div>
-                {% if error %}
-                <div class="alert alert-danger" role="alert">{{ error }}</div>
-                {% endif %}
+                {{ field_with_class(name='title', type='text', displayed_name='Title') }}
+                {{ field_with_class(name='body', type='textarea', displayed_name='Enter your post here.') }}
+                {{ field_with_class(name='img',type="file", displayed_name='Select picture') }}
                 <div class="mb-3">
                     {{ form.submit(type="submit", class="btn btn-primary") }}
                 </div>

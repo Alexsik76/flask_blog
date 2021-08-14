@@ -48,7 +48,7 @@ class Config(object):
     MAIL_PASSWORD = get_env_variable('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = get_env_variable('MAIL_DEFAULT_SENDER')
     MAIL_SUPPRESS_SEND = bool(strtobool(get_env_variable('MAIL_SUPPRESS_SEND')))
-    MAIL_DEBUG = True
+    MAIL_DEBUG = False
     # --<admin config:>--
     FLASK_ADMIN_SWATCH = 'cerulean'
     FLASK_ADMIN_EMAIL = 'alex@jurist.vn.ua'

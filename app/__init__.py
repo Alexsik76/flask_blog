@@ -21,7 +21,7 @@ admin = Admin(name='flask_main', template_mode='bootstrap4', index_view=MyHomeVi
 turbo = Turbo()
 
 
-def create_app(config='develop'):
+def create_app(config='base_config'):
     app = Flask(__name__)
     app.config.from_object(app_config[config])
     app.logger.setLevel(logging.INFO)

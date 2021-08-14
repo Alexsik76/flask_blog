@@ -1,5 +1,5 @@
-{% macro field_with_class(name, type, displayed_name='') -%}
-    {% if displayed_name == ''  %}
+{% macro field_with_class(name, type=None, displayed_name='') -%}
+    {% if displayed_name == '' %}
         {% set displayed_name = name|capitalize %}
     {% endif %}
     <div class="mb-3">
@@ -9,8 +9,13 @@
         {% elif form.is_submited %}
             {% set field_class="is-valid" %}
         {% endif %}
-        <input type="{{ type }}" class="form-control {{ field_class }}" name="{{ name }}"
-               id="{{ name }}" placeholder="{{ displayed_name }}">
+        {% if type == "textarea" %}
+            <textarea name="{{ name }}" class="form-control {{ field_class }}"
+                      id="{{ name }}" rows="3" placeholder="{{ displayed_name }}"></textarea>
+        {% else %}
+            <input name="{{ name }}" type="{{ type }}" class="form-control {{ field_class }}"
+                   id="{{ name }}" placeholder="{{ displayed_name }}">
+        {% endif %}
         {% for error in form.errors[name] %}
             <div class="invalid-feedback" style="display: block">
                 {{ error }}
