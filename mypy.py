@@ -2,7 +2,7 @@ from app.models import User, Post
 from app import db, create_app
 
 
-app = create_app(config='base_config')
+app = create_app(config='develop')
 
 
 @app.shell_context_processor

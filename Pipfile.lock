@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f4cbe891d6a9735c0e34cb17a2d624c4383f350b555d6c9bc294610e7287cab6"
+            "sha256": "09eb26afa86cbf619db4c6d12e3f2208c4001afb7e8f7c29a3c47c8f8b2f6277"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -44,14 +44,6 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==8.0.1"
-        },
-        "colorama": {
-            "hashes": [
-                "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b",
-                "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"
-            ],
-            "markers": "platform_system == 'Windows'",
-            "version": "==0.4.4"
         },
         "dnspython": {
             "hashes": [
@@ -393,10 +385,11 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:51d217659dd2e9b2518514b3cf1d2e2ea5084b07a33b557c7a4b931501a969d3"
+                "sha256:1de1db30d010ff1af14a009224ec49ab2329ad2cde454c8a708130642d579c42",
+                "sha256:6c1ec500dcdba0baa27600f6a22f6333d8b662d22027ff9f6202e3367413caa8"
             ],
-            "path": "./werkzeug-main.zip",
-            "version": "==2.1.0.dev0"
+            "index": "pypi",
+            "version": "==2.0.1"
         },
         "wsproto": {
             "hashes": [
