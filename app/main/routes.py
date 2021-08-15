@@ -22,7 +22,7 @@ def index():
 def user_info():
     user = current_user.first_name if current_user.is_authenticated else current_user
     turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
-    return 200
+    return Response(status=200, mimetype='application/json')
 
 
 @bp.route('/new_post', methods=['GET', 'POST'])
