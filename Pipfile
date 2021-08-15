@@ -18,6 +18,7 @@ turbo-flask = "*"
 gunicorn = "*"
 pymysql = "*"
 werkzeug = "*"
+gevent = "*"
 
 [dev-packages]
 
