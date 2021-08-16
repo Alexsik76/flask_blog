@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block app_content %}
     <div class="mx-auto my-5 p-4 w-50 border border-2 rounded-3 bg-light shadow">
-        <form class="justify-content-center" method="post">
+        <form class="justify-content-center" method="post" data-turbo="false">
         {{ form.csrf_token }}
         <div class="mb-3">
             <label for="emailField" class="form-label">Email</label>
