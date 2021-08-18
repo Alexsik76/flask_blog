@@ -1,5 +1,5 @@
 $(window).on('beforeunload', function () {
-    $.get($SCRIPT_ROOT + '_user_info');
+    $.get($SCRIPT_ROOT + '_close_window_info');
 });
 setTimeout(function () {
     let alertList = document.querySelectorAll('.alert');
@@ -7,4 +7,3 @@ setTimeout(function () {
         new bootstrap.Alert(alert).close();
     })
 }, 3000);
-

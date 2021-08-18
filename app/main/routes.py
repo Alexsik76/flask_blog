@@ -1,11 +1,11 @@
 import os
 from werkzeug.utils import secure_filename
 from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, Response
-from app import db, turbo
+from app import db
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.exceptions import NotFound
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, logout_user
 from app.models import Post
 from config import get_path_safe
 
@@ -18,10 +18,10 @@ def index():
     return render_template('index.html', title='Home', posts=posts)
 
 
-@bp.route('/_user_info')
-def user_info():
-    user = current_user.first_name if current_user.is_authenticated else current_user
-    turbo.push(turbo.update(render_template('auth/_user_logged_out.html', user=user), target='user-actions-info'))
+@bp.route('/_close_window_info')
+def logout_closed():
+    if current_user.is_authenticated:
+        logout_user()
     return Response(status=200, mimetype='application/json')
 
 
