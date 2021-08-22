@@ -50,8 +50,7 @@ class Config(object):
     MAIL_SUPPRESS_SEND = bool(strtobool(get_env_variable('MAIL_SUPPRESS_SEND')))
     MAIL_DEBUG = False
     # --<admin config:>--
-    FLASK_ADMIN_SWATCH = 'cerulean'
-    FLASK_ADMIN_EMAIL = 'alex@jurist.vn.ua'
+    ADMIN_EMAIL = 'alex@jurist.vn.ua'
 
 
 class DevelopmentConfig(Config):

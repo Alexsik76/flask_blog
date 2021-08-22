@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
+    is_admin = db.Column(db.Boolean)
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def __repr__(self):

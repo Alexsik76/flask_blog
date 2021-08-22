@@ -1,12 +1,13 @@
 import os
 from werkzeug.utils import secure_filename
-from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, Response
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory,\
+    Response, request
 from app import db
 from app.main import bp
 from app.main.forms import CreatePostForm
 from werkzeug.exceptions import NotFound
 from flask_login import login_required, current_user, logout_user
-from app.models import Post
+from app.models import User, Post
 from config import get_path_safe
 
 
@@ -16,6 +17,18 @@ from config import get_path_safe
 def index():
     posts = Post.query.all()
     return render_template('index.html', title='Home', posts=posts)
+
+
+@bp.route('/admin', methods=['GET', 'POST'])
+@login_required
+def admin():
+    if current_user.is_admin:
+        users = User.query.all()
+        posts = Post.query.all()
+    else:
+        users = []
+        posts = Post.query.filter_by(user_id=current_user.id).all()
+    return render_template('admin_page.html', users=users, posts=posts)
 
 
 @bp.route('/_close_window_info')

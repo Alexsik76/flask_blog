@@ -57,7 +57,8 @@ def register(token):
         new_user = User(
             email=email,
             first_name=form.first_name.data,
-            last_name=form.last_name.data
+            last_name=form.last_name.data,
+            is_admin=True if email == current_app.config['ADMIN_EMAIL'] else False
         )
         new_user.set_password(form.password.data)
         db.session.add(new_user)

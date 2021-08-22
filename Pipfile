@@ -13,7 +13,6 @@ flask-mail = "*"
 itsdangerous = "*"
 flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
-flask-admin = "*"
 turbo-flask = "*"
 gunicorn = "*"
 pymysql = "*"
