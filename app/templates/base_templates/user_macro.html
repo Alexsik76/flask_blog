@@ -1,0 +1,48 @@
+{#Field dor the form #}
+{% macro field_with_class(name, type=None, displayed_name='') -%}
+    {% if displayed_name == '' %}
+        {% set displayed_name = name|capitalize %}
+    {% endif %}
+    <div class="mb-3">
+        <label for="{{ name }}" class="form-label">{{ displayed_name }}</label>
+        {% if form.errors[name] %}
+            {% set field_class="is-invalid" %}
+        {% elif form.is_submited %}
+            {% set field_class="is-valid" %}
+        {% endif %}
+        {% if type == "textarea" %}
+            <textarea name="{{ name }}" class="form-control {{ field_class }}"
+                      id="{{ name }}" placeholder="{{ displayed_name }}" style="height: 100px"></textarea>
+        {% else %}
+            <input name="{{ name }}" type="{{ type }}" class="form-control {{ field_class }}"
+                   id="{{ name }}" placeholder="{{ displayed_name }}">
+        {% endif %}
+        {% for error in form.errors[name] %}
+            <div class="invalid-feedback" style="display: block">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </div>
+{%- endmacro %}
+{#Card for the post#}
+{% macro card_post(post) -%}
+    <div class="card mx-auto my-5 p-4 w-75 border border-2 rounded-3 bg-light shadow">
+  <div class="row g-0">
+    <div class="col-md-4">
+        <img src="{{ url_for('main.upload', author_id=post.author.id, filename=post.img) }}" class="img-fluid"
+                    style="height: 100%;
+                    width: auto;
+                    object-fit: contain;"
+             alt="No image">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.body }}</p>
+        <p class="card-text"><small class="text-muted">Added by {{ post.author.first_name }}
+                    at {{ post.timestamp.strftime("%d-%m-%y %H:%M") }} </small></p>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endmacro %}

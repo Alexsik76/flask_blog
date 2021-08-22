@@ -84,7 +84,7 @@ def login():
             return redirect(url_for('main.index'))
         else:
             login_user(user, remember=form.remember_me.data)
-            flash('Successful login', 'success')
+            flash(f'Hi, {user.first_name}!', 'success')
             return redirect(url_for('main.index'))
     return render_template('auth/login.html', form=form)
 

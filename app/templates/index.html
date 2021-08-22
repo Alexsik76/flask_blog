@@ -1,20 +1,10 @@
-{% extends "base.html" %}
+{% extends "base_templates/base.html" %}
 {% block app_content %}
-    <h1> Hi, {{ current_user.first_name }} </h1>
-    <a href={{ url_for('main.create_post') }}>New post</a>
+    <div class="d-grid gap-1 mt-3">
+        <a class="btn btn-outline-primary" type="button" href={{ url_for('main.create_post') }}>New post</a>
+    </div>
+    {% from 'base_templates/user_macro.html' import card_post with context %}
     {% for post in posts %}
-        <div class="card" style="max-height: 50vh;">
-            <div class="card-body">
-                <h5 class="card-title">{{ post.title }}</h5>
-                <p class="card-text">{{ post.body }}</p>
-                <p class="card-text"><small class="text-muted">Added by {{ post.author.first_name }}
-                    at {{ post.timestamp.strftime("%d-%m-%y %H:%M") }} </small></p>
-            </div>
-            <img src="{{ url_for('main.upload', author_id=post.author.id, filename=post.img) }}" class="card-img-bottom border border-secondary"
-                    style="height: 100%;
-                    width: auto;
-                    object-fit: contain;"
-             alt="No image">
-        </div>
+        {{ card_post(post) }}
     {% endfor %}
 {% endblock %}
