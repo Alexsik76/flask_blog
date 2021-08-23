@@ -32,7 +32,7 @@ def redirect_authenticated(f):
 
 
 @bp.route('/signup', methods=['GET', 'POST'])
-def signup():
+async def signup():
     form = SignUpForm()
     is_busy = bool(User.query.filter_by(email=form.email.data).first())
     if form.validate_on_submit() and not is_busy:

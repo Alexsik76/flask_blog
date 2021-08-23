@@ -3,4 +3,5 @@ __pycache__/
 /users_data/*
 migrations/*
 app.db
-.flaskenv
+.env
+/.env

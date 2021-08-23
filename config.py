@@ -3,7 +3,7 @@ from distutils.util import strtobool
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(basedir, '.flaskenv'))
+load_dotenv(os.path.join(basedir, '.env'))
 
 
 def get_env_variable(name):
@@ -21,8 +21,6 @@ def get_path_safe(path, folder):
 
 
 class Config(object):
-    DEBUG = False
-    TESTING = False
     SECRET_KEY = 'dev'
     SECURITY_PASSWORD_SALT = 'my_precious_two'
     STATIC_FOLDER = 'app/static'
@@ -41,21 +39,20 @@ class Config(object):
     # PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
     # --<email config:>--
     MAIL_SERVER = get_env_variable('MAIL_SERVER')
-    MAIL_PORT = int(get_env_variable('MAIL_PORT'))
-    MAIL_USE_TLS = bool(strtobool(get_env_variable('MAIL_USE_TLS')))
-    MAIL_USE_SSL = bool(strtobool(get_env_variable('MAIL_USE_SSL')))
+    MAIL_PORT = get_env_variable('MAIL_PORT')
+    MAIL_USE_TLS = get_env_variable('MAIL_USE_TLS')
+    MAIL_USE_SSL = get_env_variable('MAIL_USE_SSL')
     MAIL_USERNAME = get_env_variable('MAIL_USERNAME')
     MAIL_PASSWORD = get_env_variable('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = get_env_variable('MAIL_DEFAULT_SENDER')
-    MAIL_SUPPRESS_SEND = bool(strtobool(get_env_variable('MAIL_SUPPRESS_SEND')))
-    MAIL_DEBUG = False
+    MAIL_SUPPRESS_SEND = True
+    MAIL_DEBUG = True
     # --<admin config:>--
     ADMIN_EMAIL = 'alex@jurist.vn.ua'
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    TESTING = True
     MAIL_DEBUG = True
 
 

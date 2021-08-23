@@ -1,7 +1,6 @@
 import os
 from werkzeug.utils import secure_filename
-from flask import render_template, flash, redirect, url_for, current_app, send_from_directory,\
-    Response, request
+from flask import render_template, flash, redirect, url_for, current_app, send_from_directory, Response
 from app import db
 from app.main import bp
 from app.main.forms import CreatePostForm
@@ -15,11 +14,11 @@ from config import get_path_safe
 @bp.route('/index')
 @login_required
 def index():
-    posts = Post.query.all()
+    posts = Post.query.filter(Post.user_id.is_not(None)).all()
     return render_template('index.html', title='Home', posts=posts)
 
 
-@bp.route('/admin', methods=['GET', 'POST'])
+@bp.route('/admin')
 @login_required
 def admin():
     if current_user.is_admin:
@@ -29,6 +28,22 @@ def admin():
         users = []
         posts = Post.query.filter_by(user_id=current_user.id).all()
     return render_template('admin_page.html', users=users, posts=posts)
+
+
+@bp.route('/_delete_user/<user_id>', methods=['GET', 'POST'])
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return 'Success', 200
+
+
+@bp.route('/_delete_post/<post_id>', methods=['GET', 'POST'])
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return 'Success', 200
 
 
 @bp.route('/_close_window_info')
@@ -63,7 +78,7 @@ def create_post():
 
 @bp.route('/uploads/<author_id>/<filename>')
 @login_required
-def upload(author_id, filename):
+def upload(author_id=None, filename=None):
     try:
         img = send_from_directory(os.path.join(
             current_app.config['UPLOAD_PATH'], author_id), filename)

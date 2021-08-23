@@ -11,6 +11,7 @@
     <orderEntry type="jdk" jdkName="Pipenv (flask_blog)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JQuery" level="project" />
+    <orderEntry type="library" name="JQuery 3.5" level="project" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />

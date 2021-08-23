@@ -8,6 +8,7 @@ from app import mail
 def async_send_email(obj, msg):
     with obj.app_context():
         try:
+            print('sending')
             mail.send(msg)
         except Exception as e:
             return e

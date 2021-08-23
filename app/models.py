@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
     is_admin = db.Column(db.Boolean)
-    posts = db.relationship('Post', backref='author', lazy=True)
+    posts = db.relationship('Post', backref='author', cascade="all, delete", lazy=True)
 
     def __repr__(self):
         return f'<User {self.first_name} {self.last_name}>'
@@ -37,4 +37,4 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return f'<Post {self.id} {self.title} {self.img}>'
