@@ -14,7 +14,7 @@ from config import get_path_safe
 @bp.route('/index')
 @login_required
 def index():
-    posts = Post.query.filter(Post.user_id.is_not(None)).all()
+    posts = Post.query.filter(Post.user_id.is_not(None)).all() # noqa
     return render_template('index.html', title='Home', posts=posts)
 
 
@@ -31,19 +31,29 @@ def admin():
 
 
 @bp.route('/_delete_user/<user_id>', methods=['GET', 'POST'])
+@login_required
 def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    return 'Success', 200
+    if current_user.is_admin:
+        user = User.query.get_or_404(user_id)
+        db.session.delete(user)
+        db.session.commit()
+        return 'Success', 200
+    else:
+        flash('Operation is not permitted.', 'danger')
+        return redirect(url_for('main.index'))
 
 
 @bp.route('/_delete_post/<post_id>', methods=['GET', 'POST'])
+@login_required
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
-    db.session.delete(post)
-    db.session.commit()
-    return 'Success', 200
+    if current_user.is_admin or current_user is post.author:
+        db.session.delete(post)
+        db.session.commit()
+        return 'Success', 200
+    else:
+        flash('Operation is not permitted.', 'danger')
+        return redirect(url_for('main.index'))
 
 
 @bp.route('/_close_window_info')

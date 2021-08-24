@@ -8,7 +8,7 @@
       <excludeFolder url="file://$MODULE_DIR$/users_data/1" />
       <excludeFolder url="file://$MODULE_DIR$/users_data/2" />
     </content>
-    <orderEntry type="jdk" jdkName="Pipenv (flask_blog)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (flask_blog-HWlWFrch)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JQuery" level="project" />
     <orderEntry type="library" name="JQuery 3.5" level="project" />

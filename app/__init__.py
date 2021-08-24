@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
-from flask_mail import Mail
+from flask_mailing import Mail
 from turbo_flask import Turbo
 
 db = SQLAlchemy()
@@ -22,9 +22,6 @@ def create_app(config='base_config'):
     app = Flask(__name__)
     app.config.from_object(app_config[config])
     app.logger.setLevel(logging.INFO)
-    print(dir(app.config))
-    print(app.config.items())
-    print(app.config['MAIL_DEBUG'])
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)

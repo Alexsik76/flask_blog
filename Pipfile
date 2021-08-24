@@ -9,7 +9,6 @@ flask-sqlalchemy = "*"
 flask-login = "*"
 python-dotenv = "*"
 flask-wtf = "*"
-flask-mail = "*"
 itsdangerous = "*"
 flask-migrate = "*"
 wtforms = {extras = ["email"], version = "*"}
@@ -18,6 +17,8 @@ gunicorn = "*"
 pymysql = "*"
 werkzeug = "*"
 gevent = "*"
+flask-mailing = "*"
+httpx = "*"
 
 [dev-packages]
 

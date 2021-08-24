@@ -36,8 +36,9 @@ async def signup():
     form = SignUpForm()
     is_busy = bool(User.query.filter_by(email=form.email.data).first())
     if form.validate_on_submit() and not is_busy:
-        send_email(form.email.data, goal='registration')
-        flash('To continue registration, follow the link in the letter.', 'info')
+        res = await send_email(form.email.data, goal='registration')
+        print(res)
+        flash(f'To continue registration, follow the link in the letter.', 'info')
         return redirect(url_for('main.index'))
     elif is_busy:
         offer_to_log_in(form.email.data)
@@ -55,12 +56,13 @@ def register(token):
     form.email.data = email
     if form.validate_on_submit():
         new_user = User(
-            email=email,
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-            is_admin=True if email == current_app.config['ADMIN_EMAIL'] else False
+            email=email, # noqa
+            first_name=form.first_name.data, # noqa
+            last_name=form.last_name.data, # noqa
+            is_admin=True if email == current_app.config['ADMIN_EMAIL'] else False # noqa
         )
         new_user.set_password(form.password.data)
+        print(f'{new_user.is_admin:=}')
         db.session.add(new_user)
         db.session.commit()
         if not os.path.isdir(os.path.join(current_app.config['UPLOAD_PATH'], str(new_user.id))):
